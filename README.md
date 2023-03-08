@@ -57,8 +57,9 @@ Open this file using nano or your text editor of choice:
 nano .env
 ```
 The current .env file from the travellist demo application contains settings to use a local MySQL database, with 127.0.0.1 as database host. We need to update the DB_HOST variable so that it points to the database service we will create in our Docker environment. In this guide, we’ll call our database service db. Go ahead and replace the listed value of DB_HOST with the database service name:
-```
+
 .env
+```
 APP_NAME=laravel
 APP_ENV=dev
 APP_KEY=
