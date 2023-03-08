@@ -18,8 +18,8 @@ To get started, we’ll fetch the demo Laravel application from its Github repos
 
 To obtain the application code that is compatible with this tutorial, download release tutorial-1.0.1 to your home directory with:
 
-cd ~
-curl -L https://github.com/ajithredrigo2/Laravel-Docker.git -o laravel.zip
+`cd ~`
+`curl -L https://github.com/ajithredrigo2/Laravel-Docker.git -o laravel.zip`
 We’ll need the unzip command to unpack the application code. In case you haven’t installed this package before, do so now with:
 
 sudo apt update
