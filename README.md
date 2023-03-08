@@ -1,4 +1,4 @@
-Introduction
+#Introduction
 To containerize an application refers to the process of adapting an application and its components in order to be able to run it in lightweight environments known as containers. Such environments are isolated and disposable, and can be leveraged for developing, testing, and deploying applications to production.
 
 In this guide, we’ll use Docker Compose to containerize a Laravel application for development. When you’re finished, you’ll have a demo Laravel application running on three separate service containers:
@@ -18,18 +18,18 @@ To get started, we’ll fetch the demo Laravel application from its Github repos
 To obtain the application code that is compatible with this tutorial, download release tutorial-1.0.1 to your home directory with:
 
 cd ~
-curl -L https://github.com/do-community/travellist-laravel-demo/archive/tutorial-1.0.1.zip -o travellist.zip
+curl -L https://github.com/ajithredrigo2/Laravel-Docker.git -o laravel.zip
 We’ll need the unzip command to unpack the application code. In case you haven’t installed this package before, do so now with:
 
 sudo apt update
 sudo apt install unzip
 Now, unzip the contents of the application and rename the unpacked directory for easier access:
 
-unzip travellist.zip
-mv travellist-laravel-demo-tutorial-1.0.1 travellist-demo
+unzip laravel.zip
+
 Navigate to the travellist-demo directory:
 
-cd travellist-demo
+cd laravel
 In the next step, we’ll create a .env configuration file to set up the application.
 
 Step 2 — Setting Up the Application’s .env File
@@ -59,8 +59,8 @@ LOG_CHANNEL=stack
 DB_CONNECTION=mysql
 DB_HOST=db
 DB_PORT=3306
-DB_DATABASE=travellist
-DB_USERNAME=travellist_user
+DB_DATABASE=laravel
+DB_USERNAME=database_user
 DB_PASSWORD=password
 ...
 Feel free to also change the database name, username, and password, if you wish. These variables will be leveraged in a later step where we’ll set up the docker-compose.yml file to configure our services.
