@@ -58,7 +58,7 @@ nano .env
 ```
 The current .env file from the laravel application contains settings to use a local MySQL database, with 127.0.0.1 as database host. We need to update the DB_HOST variable so that it points to the database service we will create in our Docker environment. In this guide, we’ll call our database service db. Go ahead and replace the listed value of DB_HOST with the database service name:
 
-.env
+### .env
 ```
 APP_NAME=laravel
 APP_ENV=dev
@@ -93,7 +93,7 @@ nano Dockerfile
 ```
 Copy the following contents to your Dockerfile:
 
-Dockerfile
+### Dockerfile
 ```
 FROM php:7.4-fpm
 
@@ -155,7 +155,7 @@ nano docker-compose/apache/laravel.conf
 ```
 Copy the following Apache configuration to that file:
 
-docker-compose/apache/laravel.conf
+### docker-compose/apache/laravel.conf
 ```
 <VirtualHost *:80>
 
@@ -190,7 +190,7 @@ The following MySQL dump is based on the database we’ve set up in our Laravel 
 
 Add the following code to the file:
 
-docker-compose/mysql/db_init.sql
+### docker-compose/mysql/db_init.sql
 ```
 DROP TABLE IF EXISTS `places`;
 
@@ -228,7 +228,7 @@ A typical docker-compose.yml file starts with a version definition, followed by 
 
 To get started, copy this boilerplate code into your docker-compose.yml file:
 
-docker-compose.yml
+### docker-compose.yml
 ```
 version: "3.7"
 services:
@@ -247,7 +247,7 @@ Even though the document root being served as the application is located in the 
 
 Copy the following service definition under your services node, inside the docker-compose.yml file:
 
-docker-compose.yml
+### docker-compose.yml
 ```
   app:
     build:
@@ -282,7 +282,7 @@ The db service uses a pre-built MySQL 8.0 image from Docker Hub. Because Docker 
 
 Include the following service definition in your services node, right after the app service:
 
-docker-compose.yml
+### docker-compose.yml
 ```
   db:
     image: mysql:8.0
@@ -312,7 +312,7 @@ networks: Sets up this service to use a network named laravel.
 Finished docker-compose.yml File
 This is how our finished docker-compose.yml file looks like:
 
-docker-compose.yml
+### docker-compose.yml
 ```
 version: "3.7"
 services:
@@ -367,7 +367,7 @@ docker-compose build app
 ```
 This command might take a few minutes to complete. You’ll see output similar to this:
 
-Output
+### Output
 
 Building app
 Step 1/12 : FROM php:7.4-apache
@@ -413,7 +413,7 @@ When the build is finished, you can run the environment in background mode with:
 ```
 docker-compose up -d
 ```
-Output
+### Output
 ```
 Creating laravel-db    ... done
 Creating laravel-app   ... done
@@ -424,7 +424,7 @@ docker-compose ps
 ```
 You’ll see output like this:
 
-Output
+### Output
    Name                  Command               State                          Ports
 ----------------------------------------------------------------------------------------------------------
 laravel-app   docker-php-entrypoint apac ...   Up      0.0.0.0:8000->80/tcp,:::8000->80/tcp
@@ -434,7 +434,7 @@ Your environment is now up and running, but we still need to execute a couple co
 ```
 docker-compose exec app ls -l
 ```
-Output
+### Output
 ```
 total 364
 -rw-r--r--  1 ubuntu   ubuntu    901 Mar  7 09:35 Dockerfile
@@ -461,12 +461,13 @@ drwxrwxr-x 42 ubuntu   ubuntu   4096 Mar  7 09:32 vendor
 -rw-rw-r--  1 ubuntu   ubuntu    559 Apr 12  2022 webpack.mix.js
 ```
 We’ll now run composer install to install the application dependencies:
-
+```
 docker-compose exec app rm -rf vendor composer.lock
 docker-compose exec app composer install
+```
 You’ll see output like this:
 
-Output
+### Output
 ```
 No composer.lock file present. Updating dependencies to latest instead of installing from lock file. See https://getcomposer.org/install for more information.
 . . .
@@ -509,14 +510,14 @@ The last thing we need to do before testing the application is to generate a uni
 docker-compose exec app php artisan key:generate
 
 ```
-Output
+### Output
 ```
 Application key set successfully.
 ```
 Now go to your browser and access your server’s domain name or IP address on port 8000:
 
 http://server_domain_or_IP:8000
-Note: In case you are running this demo on your local machine, use http://localhost:8000 to access the application from your browser.
+### Note: In case you are running this demo on your local machine, use http://localhost:8000 to access the application from your browser.
 
 You’ll see a page like this:
 
@@ -537,7 +538,7 @@ If you want to pause your Docker Compose environment while keeping the state of 
 ```
 docker-compose pause
 ```
-Output
+### Output
 ```
 Pausing laravel-db    ... done
 Pausing laravel-app   ... done
@@ -546,7 +547,7 @@ You can then resume your services with:
 ```
 docker-compose unpause
 ```
-Output
+### Output
 ```
 Unpausing laravel-app   ... done
 Unpausing laravel-db    ... done
@@ -555,7 +556,7 @@ To shut down your Docker Compose environment and remove all of its containers, n
 ```
 docker-compose down
 ```
-Output
+### Output
 ```
 Stopping laravel-app ... done
 Stopping laravel-db  ... done
