@@ -368,7 +368,7 @@ docker-compose build app
 This command might take a few minutes to complete. You’ll see output similar to this:
 
 ### Output
-
+```
 Building app
 Step 1/12 : FROM php:7.4-apache
  ---> 20a3732f422b
@@ -408,7 +408,7 @@ Step 12/12 : USER $user
 
 Successfully built 6ea7767cc5bf
 Successfully tagged laravel:latest
-
+```
 When the build is finished, you can run the environment in background mode with:
 ```
 docker-compose up -d
@@ -425,11 +425,12 @@ docker-compose ps
 You’ll see output like this:
 
 ### Output
+```
    Name                  Command               State                          Ports
 ----------------------------------------------------------------------------------------------------------
 laravel-app   docker-php-entrypoint apac ...   Up      0.0.0.0:8000->80/tcp,:::8000->80/tcp
 laravel-db    docker-entrypoint.sh mysqld      Up      0.0.0.0:3307->3306/tcp,:::3307->3306/tcp, 33060/tcp
-
+```
 Your environment is now up and running, but we still need to execute a couple commands to finish setting up the application. You can use the docker-compose exec command to execute commands in the service containers, such as an ls -l to show detailed information about files in the application directory:
 ```
 docker-compose exec app ls -l
@@ -515,8 +516,9 @@ docker-compose exec app php artisan key:generate
 Application key set successfully.
 ```
 Now go to your browser and access your server’s domain name or IP address on port 8000:
-
+```
 http://server_domain_or_IP:8000
+```
 ### Note: In case you are running this demo on your local machine, use http://localhost:8000 to access the application from your browser.
 
 You’ll see a page like this:
