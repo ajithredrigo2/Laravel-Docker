@@ -4,9 +4,9 @@ To containerize an application refers to the process of adapting an application 
 
 In this guide, we’ll use Docker Compose to containerize a Laravel application for development. When you’re finished, you’ll have a demo Laravel application running on three separate service containers:
 
-An app service running PHP7.4-FPM;
-A db service running MySQL 5.7;
-An nginx service that uses the app service to parse PHP code before serving the Laravel application to the final user.
+An app service running PHP7.4-apache;
+A db service running MySQL 8.0;
+An apache service that uses the app service to parse PHP code before serving the Laravel application to the final user.
 To allow for a streamlined development process and facilitate application debugging, we’ll keep application files in sync by using shared volumes. We’ll also see how to use docker-compose exec commands to run Composer and Artisan on the app container.
 
 # Prerequisites
@@ -35,7 +35,7 @@ Now, unzip the contents of the application and rename the unpacked directory for
 unzip laravel.zip
 sudo mv Laravel-Docker-test Laravel-Docker
 ```
-Navigate to the travellist-demo directory:
+Navigate to the laravel directory:
 ```
 cd laravel
 ```
@@ -56,7 +56,7 @@ Open this file using nano or your text editor of choice:
 ```
 nano .env
 ```
-The current .env file from the travellist demo application contains settings to use a local MySQL database, with 127.0.0.1 as database host. We need to update the DB_HOST variable so that it points to the database service we will create in our Docker environment. In this guide, we’ll call our database service db. Go ahead and replace the listed value of DB_HOST with the database service name:
+The current .env file from the laravel application contains settings to use a local MySQL database, with 127.0.0.1 as database host. We need to update the DB_HOST variable so that it points to the database service we will create in our Docker environment. In this guide, we’ll call our database service db. Go ahead and replace the listed value of DB_HOST with the database service name:
 
 .env
 ```
@@ -81,9 +81,9 @@ Feel free to also change the database name, username, and password, if you wish.
 Save the file when you’re done editing. If you used nano, you can do that by pressing Ctrl+x, then Y and Enter to confirm.
 
 # Step 3 — Setting Up the Application’s Dockerfile
-Although both our MySQL and Nginx services will be based on default images obtained from the Docker Hub, we still need to build a custom image for the application container. We’ll create a new Dockerfile for that.
+Although both our MySQL and Apache services will be based on default images obtained from the Docker Hub, we still need to build a custom image for the application container. We’ll create a new Dockerfile for that.
 
-Our travellist image will be based on the php:7.4-fpm official PHP image from Docker Hub. On top of that basic PHP-FPM environment, we’ll install a few extra PHP modules and the Composer dependency management tool.
+Our laravel image will be based on the php:7.4-apache official PHP image from Docker Hub. On top of that basic PHP-FPM environment, we’ll install a few extra PHP modules and the Composer dependency management tool.
 
 We’ll also create a new system user; this is necessary to execute artisan and composer commands while developing the application. The uid setting ensures that the user inside the container has the same uid as your system user on your host machine, where you’re running Docker. This way, any files created by these commands are replicated in the host with the correct permissions. This also means that you’ll be able to use your code editor of choice in the host machine to develop the application that is running inside containers.
 
@@ -140,20 +140,20 @@ A new system user is then created and set up using the user and uid arguments th
 
 Finally, we set the default working dir as /var/www and change to the newly created user. This will make sure you’re connecting as a regular user, and that you’re on the right directory, when running composer and artisan commands on the application container.
 
-# Step 4 — Setting Up Nginx Configuration and Database Dump Files
+# Step 4 — Setting Up Apache Configuration and Database Dump Files
 When creating development environments with Docker Compose, it is often necessary to share configuration or initialization files with service containers, in order to set up or bootstrap those services. This practice facilitates making changes to configuration files to fine-tune your environment while you’re developing the application.
 
 We’ll now set up a folder with files that will be used to configure and initialize our service containers.
 
-To set up Nginx, we’ll share a travellist.conf file that will configure how the application is served. Create the docker-compose/nginx folder with:
+To set up Apache, we’ll share a laravel.conf file that will configure how the application is served. Create the docker-compose/apache folder with:
 ```
 mkdir -p docker-compose/apache
 ```
-Open a new file named travellist.conf within that directory:
+Open a new file named laravel.conf within that directory:
 ```
 nano docker-compose/apache/laravel.conf
 ```
-Copy the following Nginx configuration to that file:
+Copy the following Apache configuration to that file:
 
 docker-compose/apache/laravel.conf
 ```
@@ -172,11 +172,11 @@ docker-compose/apache/laravel.conf
 
 </VirtualHost>
 ```
-This file will configure Nginx to listen on port 80 and use index.php as default index page. It will set the document root to /var/www/public, and then configure Nginx to use the app service on port 9000 to process *.php files.
+This file will configure Apache to listen on port 80 and use index.php as default index page. It will set the document root to /var/www/public, and then configure Apache to use the app service on port 9000 to process *.php files.
 
 Save and close the file when you’re done editing.
 
-To set up the MySQL database, we’ll share a database dump that will be imported when the container is initialized. This is a feature provided by the MySQL 5.7 image we’ll be using on that container.
+To set up the MySQL database, we’ll share a database dump that will be imported when the container is initialized. This is a feature provided by the MySQL 8.0 image we’ll be using on that container.
 
 Create a new folder for your MySQL initialization files inside the docker-compose folder:
 ```
@@ -214,11 +214,11 @@ Docker Compose enables you to create multi-container environments for applicatio
 
 To set up our service definitions, we’ll create a new file called docker-compose.yml. Typically, this file is located at the root of the application folder, and it defines your containerized environment, including the base images you will use to build your containers, and how your services will interact.
 
-We’ll define three different services in our docker-compose.yml file: app, db, and nginx.
+We’ll define three different services in our docker-compose.yml file: app, db, and apache.
 
-The app service will build an image called travellist, based on the Dockerfile we’ve previously created. The container defined by this service will run a php-fpm server to parse PHP code and send the results back to the nginx service, which will be running on a separate container. The mysql service defines a container running a MySQL 5.7 server. Our services will share a bridge network named travellist.
+The app service will build an image called laravel, based on the Dockerfile we’ve previously created. The container defined by this service will run a php-fpm server to parse PHP code and send the results back to the apache service, which will be running on a separate container. The mysql service defines a container running a MySQL 8.0 server. Our services will share a bridge network named laravel.
 
-The application files will be synchronized on both the app and the nginx services via bind mounts. Bind mounts are useful in development environments because they allow for a performant two-way sync between host machine and containers.
+The application files will be synchronized on both the app and the apache services via bind mounts. Bind mounts are useful in development environments because they allow for a performant two-way sync between host machine and containers.
 
 Create a new docker-compose.yml file at the root of the application folder:
 ```
@@ -238,12 +238,12 @@ networks:
   laravel:
     driver: bridge
 ```
-We’ll now edit the services node to include the app, db and nginx services.
+We’ll now edit the services node to include the app, db and apache services.
 
 The app Service
-The app service will set up a container named travellist-app. It builds a new Docker image based on a Dockerfile located in the same path as the docker-compose.yml file. The new image will be saved locally under the name travellist.
+The app service will set up a container named laravel-app. It builds a new Docker image based on a Dockerfile located in the same path as the docker-compose.yml file. The new image will be saved locally under the name laravel.
 
-Even though the document root being served as the application is located in the nginx container, we need the application files somewhere inside the app container as well, so we’re able to execute command line tasks with the Laravel Artisan tool.
+Even though the document root being served as the application is located in the apache container, we need the application files somewhere inside the app container as well, so we’re able to execute command line tasks with the Laravel Artisan tool.
 
 Copy the following service definition under your services node, inside the docker-compose.yml file:
 
@@ -275,8 +275,8 @@ image: The name that will be used for the image being built.
 container_name: Sets up the container name for this service.
 restart: Always restart, unless the service is stopped.
 working_dir: Sets the default directory for this service as /var/www.
-volumes: Creates a shared volume that will synchronize contents from the current directory to /var/www inside the container. Notice that this is not your document root, since that will live in the nginx container.
-networks: Sets up this service to use a network named travellist.
+volumes: Creates a shared volume that will synchronize contents from the current directory to /var/www inside the container. Notice that this is not your document root, since that will live in the apache container.
+networks: Sets up this service to use a network named laravel.
 The db Service
 The db service uses a pre-built MySQL 8.0 image from Docker Hub. Because Docker Compose automatically loads .env variable files located in the same directory as the docker-compose.yml file, we can obtain our database settings from the Laravel .env file we created in a previous step.
 
@@ -302,12 +302,12 @@ docker-compose.yml
 ```
 These settings do the following:
 
-image: Defines the Docker image that should be used for this container. In this case, we’re using a MySQL 5.7 image from Docker Hub.
-container_name: Sets up the container name for this service: travellist-db.
+image: Defines the Docker image that should be used for this container. In this case, we’re using a MySQL 8.0 image from Docker Hub.
+container_name: Sets up the container name for this service: laravel-db.
 restart: Always restart this service, unless it is explicitly stopped.
 environment: Defines environment variables in the new container. We’re using values obtained from the Laravel .env file to set up our MySQL service, which will automatically create a new database and user based on the provided environment variables.
 volumes: Creates a volume to share a .sql database dump that will be used to initialize the application database. The MySQL image will automatically import .sql files placed in the /docker-entrypoint-initdb.d directory inside the container.
-networks: Sets up this service to use a network named travellist.
+networks: Sets up this service to use a network named laravel.
 
 Finished docker-compose.yml File
 This is how our finished docker-compose.yml file looks like:
@@ -561,7 +561,7 @@ Stopping laravel-app ... done
 Stopping laravel-db  ... done
 Removing laravel-app ... done
 Removing laravel-db  ... done
-Removing network demo_laravel
+Removing network laravel
 ```
 For an overview of all Docker Compose commands, please check the Docker Compose command-line reference.
 
