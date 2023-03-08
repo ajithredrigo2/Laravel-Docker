@@ -24,15 +24,19 @@ curl -L https://github.com/ajithredrigo2/Laravel-Docker.git -o laravel.zip
 ```
 We’ll need the unzip command to unpack the application code. In case you haven’t installed this package before, do so now with:
 
+```
 sudo apt update
 sudo apt install unzip
+```
+
 Now, unzip the contents of the application and rename the unpacked directory for easier access:
-
+```
 unzip laravel.zip
-
+```
 Navigate to the travellist-demo directory:
-
+```
 cd laravel
+```
 In the next step, we’ll create a .env configuration file to set up the application.
 
 Step 2 — Setting Up the Application’s .env File
