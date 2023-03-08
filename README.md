@@ -37,7 +37,7 @@ sudo mv Laravel-Docker-test Laravel-Docker
 ```
 Navigate to the laravel directory:
 ```
-cd laravel
+cd Laravel-Docker
 ```
 In the next step, we’ll create a .env configuration file to set up the application.
 
