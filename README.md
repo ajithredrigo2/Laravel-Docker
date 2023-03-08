@@ -1,4 +1,4 @@
-****Introduction****
+# Introduction
 
 To containerize an application refers to the process of adapting an application and its components in order to be able to run it in lightweight environments known as containers. Such environments are isolated and disposable, and can be leveraged for developing, testing, and deploying applications to production.
 
@@ -9,7 +9,7 @@ A db service running MySQL 5.7;
 An nginx service that uses the app service to parse PHP code before serving the Laravel application to the final user.
 To allow for a streamlined development process and facilitate application debugging, we’ll keep application files in sync by using shared volumes. We’ll also see how to use docker-compose exec commands to run Composer and Artisan on the app container.
 
-Prerequisites
+# Prerequisites
 Access to an Ubuntu 22.04 local machine or development server as a non-root user with sudo privileges. If you’re using a remote server, it’s advisable to have an active firewall installed. To set these up, please refer to our Initial Server Setup Guide for Ubuntu 22.04.
 Docker installed on your server, following Steps 1 and 2 of How To Install and Use Docker on Ubuntu 22.04.
 Docker Compose installed on your server, following Step 1 of How To Install and Use Docker Compose on Ubuntu 22.04.
