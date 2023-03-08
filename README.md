@@ -14,7 +14,7 @@ Access to an Ubuntu 22.04 local machine or development server as a non-root user
 Docker installed on your server, following Steps 1 and 2 of How To Install and Use Docker on Ubuntu 22.04.
 Docker Compose installed on your server, following Step 1 of How To Install and Use Docker Compose on Ubuntu 22.04.
 
-#Step 1 — Obtaining the Demo Application
+# Step 1 — Obtaining the Demo Application
 To get started, we’ll fetch the demo Laravel application from its Github repository. We’re interested in the tutorial-01 branch, which contains the basic Laravel application we’ve created in the first guide of this series.
 
 To obtain the application code that is compatible with this tutorial, download release tutorial-1.0.1 to your home directory with:
@@ -41,7 +41,7 @@ cd laravel
 ```
 In the next step, we’ll create a .env configuration file to set up the application.
 
-#Step 2 — Setting Up the Application’s .env File
+# Step 2 — Setting Up the Application’s .env File
 The Laravel configuration files are located in a directory called config, inside the application’s root directory. Additionally, a .env file is used to set up environment-dependent configuration, such as credentials and any information that might vary between deploys. This file is not included in revision control.
 
 Warning: The environment configuration file contains sensitive information about your server, including database credentials and security keys. For that reason, you should never share this file publicly.
@@ -80,7 +80,7 @@ Feel free to also change the database name, username, and password, if you wish.
 
 Save the file when you’re done editing. If you used nano, you can do that by pressing Ctrl+x, then Y and Enter to confirm.
 
-Step 3 — Setting Up the Application’s Dockerfile
+# Step 3 — Setting Up the Application’s Dockerfile
 Although both our MySQL and Nginx services will be based on default images obtained from the Docker Hub, we still need to build a custom image for the application container. We’ll create a new Dockerfile for that.
 
 Our travellist image will be based on the php:7.4-fpm official PHP image from Docker Hub. On top of that basic PHP-FPM environment, we’ll install a few extra PHP modules and the Composer dependency management tool.
